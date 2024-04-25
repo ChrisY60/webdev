@@ -127,8 +127,9 @@ public class VideoServiceImpl implements VideoService {
         videoRepository.save(video);
 
         NotificationDTO notificationDTO = new NotificationDTO(
-                video.getUserId(), userId, video.getId(), "New like on your video!"
+                video.getUserId(), userId,"New like on your video!"
         );
+        notificationDTO.setVideoId(video.getId());
         notificationProducer.sendNotification(likeTopic, notificationDTO);
     }
 

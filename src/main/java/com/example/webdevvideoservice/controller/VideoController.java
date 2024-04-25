@@ -3,6 +3,7 @@ package com.example.webdevvideoservice.controller;
 import com.example.webdevvideoservice.DTO.VideoListDTO;
 import com.example.webdevvideoservice.DTO.VideoUploadDTO;
 import com.example.webdevvideoservice.DTO.VideoViewDTO;
+import com.example.webdevvideoservice.repository.VideoRepository;
 import com.example.webdevvideoservice.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VideoController {
     private final VideoService videoService;
+    private final VideoRepository videoRepository;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<VideoListDTO>> getVideosByUserId(
@@ -64,5 +66,15 @@ public class VideoController {
     ) {
         videoService.interactWithVideo(videoId, userId, interactionType);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/title")
+    public ResponseEntity<String> getVideoTitle(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(videoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Video not found!"))
+                .getTitle()
+        );
     }
 }
