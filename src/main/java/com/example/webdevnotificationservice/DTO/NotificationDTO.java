@@ -12,7 +12,7 @@ public class NotificationDTO {
     private Long senderId;
     @NonNull
     private String type = "VIDEO_UPLOAD";
-    @NonNull
+    @Nullable
     private Long videoId;
     @Nullable
     private Long commentId;
