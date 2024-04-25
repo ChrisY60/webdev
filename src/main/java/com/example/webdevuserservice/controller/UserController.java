@@ -67,4 +67,18 @@ public class UserController {
         userService.unsubscribe(id, subscriptionId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/email")
+    public ResponseEntity<String> getEmail(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(userService.getUser(id).getEmail());
+    }
+
+    @GetMapping("/{id}/username")
+    public ResponseEntity<String> getUsername(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(userService.getUser(id).getUsername());
+    }
 }
