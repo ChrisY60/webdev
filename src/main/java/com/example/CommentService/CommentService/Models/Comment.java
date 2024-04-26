@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Comment {
     @PrimaryKey
     private UUID id;
-    private String authorId;
+    private long authorId;
     private long videoId;
     private String content;
     private Date timestamp;

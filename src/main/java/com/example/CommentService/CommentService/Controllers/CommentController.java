@@ -3,7 +3,9 @@ package com.example.CommentService.CommentService.Controllers;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.example.CommentService.CommentService.Models.CommentDTO;
 import com.example.CommentService.CommentService.Models.Comment;
+import com.example.CommentService.CommentService.Models.NotificationDTO;
 import com.example.CommentService.CommentService.Repositories.CommentRepository;
+import com.example.CommentService.CommentService.producer.NotificationProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +21,12 @@ import java.util.stream.Collectors;
 public class CommentController {
 
     private final CommentRepository commentRepository;
+    private final NotificationProducer notificationProducer;
 
     @Autowired
-    public CommentController(CommentRepository commentRepository) {
+    public CommentController(CommentRepository commentRepository, NotificationProducer notificationProducer) {
         this.commentRepository = commentRepository;
+        this.notificationProducer = notificationProducer;
     }
 
     @PostMapping
@@ -44,7 +48,8 @@ public class CommentController {
         savedCommentDTO.setVideoId(savedComment.getVideoId());
         savedCommentDTO.setContent(savedComment.getContent());
         savedCommentDTO.setTimestamp(savedComment.getTimestamp());
-
+        NotificationDTO notificationDTO =new NotificationDTO(comment.getAuthorId(), comment.getVideoId(), comment.getId(), "New Comment Added!" );
+        notificationProducer.sendNotification("user-subscribe", notificationDTO);
         return new ResponseEntity<>(savedCommentDTO, HttpStatus.CREATED);
     }
 

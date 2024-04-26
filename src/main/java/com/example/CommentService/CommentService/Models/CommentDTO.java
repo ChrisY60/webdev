@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Data
 public class CommentDTO {
-    private String authorId;
+    private long authorId;
     private long videoId;
     private String content;
     private Date timestamp;
